@@ -1,0 +1,12 @@
+{
+  "devDependencies": {
+    "@types/fs-extra": "^9.0.1",
+    "simple-git": "^2.7.0",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.5"
+  },
+  "dependencies": {
+    "execa": "^4.0.2",
+    "fs-extra": "^9.0.1"
+  }
+}
