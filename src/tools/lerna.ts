@@ -1,6 +1,6 @@
-import Package from '../Package';
 import fs from 'fs-extra';
 import path from 'path';
+import Step from './Step';
 
 interface LernaOptions {
   overrideVersion?: boolean;
@@ -14,7 +14,7 @@ const lerna = ({
   overrideWorkspaces,
   workspaces = ['packages/*'],
   publishUrl,
-}: LernaOptions) => async (pkg: Package) => {
+}: LernaOptions): Step => async (pkg) => {
   if (!pkg.devDependencies.lerna || overrideVersion) {
     pkg.devDependencies.lerna = '^3.22.1';
   }

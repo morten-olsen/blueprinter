@@ -1,6 +1,7 @@
 import Package from '../Package';
 import path from 'path';
 import fs from 'fs-extra';
+import Step from './Step';
 
 interface TypescriptOptions {
   overrideVersion?: boolean;
@@ -8,10 +9,12 @@ interface TypescriptOptions {
 
 const typescript = ({
   overrideVersion,
-}: TypescriptOptions) => async (pkg: Package) => {
-  if (!pkg.dependencies.typescript || overrideVersion) {
-    pkg.dependencies.typescript = '^3.9.5';
+}: TypescriptOptions): Step => async (pkg) => {
+  if (!pkg.devDependencies.typescript || overrideVersion) {
+    pkg.devDependencies.typescript = '^3.9.5';
   }
+
+  pkg.scripts.build = 'tsc --build';
 
   const config = {
     compilerOptions: {

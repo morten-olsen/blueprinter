@@ -1,3 +1,4 @@
+import Step from './Step';
 import Package from '../Package';
 import fs from 'fs-extra';
 import path from 'path';
@@ -6,15 +7,16 @@ interface CreatePackageOptions {
   owner?: string;
 }
 
-const createPackage = ({
+const createMonoRepoPackage = ({
   owner,
-}: CreatePackageOptions) => (name: string) => async (pkg: Package) => {
+}: CreatePackageOptions) => (name: string): Step => async (pkg: Package) => {
   const pkgName = owner ? `@${owner}/${name}` : name;
   const pkgLocation = path.join(pkg.directory, 'packages', name);
   const location = path.join(pkgLocation, 'package.json');
   await fs.mkdirp(pkgLocation);
   await fs.mkdirp(path.join(pkgLocation, 'src'));
   const nPkg = new Package(pkgName, location);
+  nPkg.main = './dist/index.js';
   
   const tsConfigLocation = path.join(pkg.directory, 'tsconfig.json');
   if (fs.existsSync(tsConfigLocation)) {
@@ -44,7 +46,7 @@ const createPackage = ({
 
   await fs.writeFile(location, JSON.stringify(nPkg.generate(), null, '  '), 'utf-8');
 
-  return pkg;
+  return nPkg;
 };
 
-export default createPackage;
+export default createMonoRepoPackage;

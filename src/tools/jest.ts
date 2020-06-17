@@ -1,12 +1,12 @@
-import Package from '../Package';
+import Step from './Step';
 
 interface JestOptions {
   overrideVersion?: boolean;
 }
 
-const jest = async ({
+const jest = ({
   overrideVersion,
-}: JestOptions) => async (pkg: Package) => {
+}: JestOptions):Step => async (pkg) => {
   if (!pkg.devDependencies.jest || overrideVersion) {
     pkg.devDependencies.jest = '^26.0.1';
   }

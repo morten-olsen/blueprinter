@@ -4,22 +4,29 @@ import path from 'path';
 
 const run = async () => {
   const location = path.join(process.cwd(), 'test');
-  const createPackage = tools.createPackage({
+  const createPackage = tools.createMonoRepoPackage({
     owner: 'yo',
   });
   const setup = tools.compose(
-    tools.finalize,
-    createPackage('foo'),
-    createPackage('bar'),
-    createPackage('baz'),
-    tools.lerna({}),
-    tools.jest({}),
-    tools.typescript({}),
-    tools.git,
     tools.pkg('test'),
+    tools.git,
+    tools.typescript({}),
+    tools.jest({}),
+    tools.lerna({}),
+    tools.passthrough(
+      createPackage('baz'),
+    ),
+    tools.passthrough(
+      createPackage('bar'),
+    ),
+    tools.passthrough(
+      createPackage('foo'),
+    ),
+    tools.gitignore,
+    tools.finalize,
   );
 
-  const a = await setup(location);
+  await setup(location);
 };
 
 run().catch(console.error);

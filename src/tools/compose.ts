@@ -1,8 +1,11 @@
-const compose = (...functions: any[]) =>
-(initialValue: any) =>
-    functions.reduceRight(
-      (sum, fn) => Promise.resolve(sum).then(fn),
-      initialValue
-    );
+import Step from './Step';
+import InitStep from './InitStep';
 
-    export default compose;
+const compose = <T> (init: InitStep<T>, ...functions: Step[]) => (initialValue: T) => (
+  [init, ...functions].reduce(
+     (sum: any, fn) => Promise.resolve(sum).then(fn),
+    initialValue
+  )
+);
+
+export default compose;

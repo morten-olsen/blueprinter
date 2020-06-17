@@ -1,7 +1,7 @@
-import Package from '../Package';
 import simpleGit from 'simple-git';
+import Step from './Step';
 
-const git = async (pkg: Package) => {
+const git: Step = async (pkg) => {
   const git = simpleGit(pkg.directory);
   const isRepo = await git.checkIsRepo();
   if (isRepo.toString() === 'false') {
