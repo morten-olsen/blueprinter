@@ -1,6 +1,9 @@
 import fs from 'fs-extra';
 import path from 'path';
 import Step from './Step';
+import compose from './compose';
+import addDevDependencies from './addDevDependencies';
+import mkjson from './mkjson';
 
 interface LernaOptions {
   overrideVersion?: boolean;
@@ -14,39 +17,33 @@ const lerna = ({
   overrideWorkspaces,
   workspaces = ['packages/*'],
   publishUrl,
-}: LernaOptions): Step => async (pkg) => {
-  if (!pkg.devDependencies.lerna || overrideVersion) {
-    pkg.devDependencies.lerna = '^3.22.1';
-  }
-
-  if (!pkg.opts.workspaces || overrideWorkspaces) {
-    pkg.opts.workspaces = workspaces;
-    await fs.mkdirp(path.join(pkg.directory, 'packages'));
-  }
-
-  pkg.isPrivate = true;
-  pkg.scripts.postinstall = 'lerna bootstrap';
-
-  const lernaLocation = path.join(pkg.directory, 'lerna.json');
-  const lernaConfig: any = {
-    useWorkspaces: true,
-    npmClient: 'yarn',
-    version: '1.0.0',
-  };
-  if (publishUrl) {
-    if (!lernaConfig.command) {
-      lernaConfig.command = {};
+}: LernaOptions): Step => compose(
+  addDevDependencies({
+    lerna: '^3.22.1',
+  }),
+  mkjson({
+    location: './lerna.json',
+    json: {
+      useWorkspaces: true,
+      npmClient: 'yarn',
+      version: '1.0.0',
+      command: publishUrl ? {
+        publish: {
+          registry: publishUrl,
+        },
+      } : undefined,
+    },
+  }),
+  async (pkg) => {
+    if (!pkg.opts.workspaces || overrideWorkspaces) {
+      pkg.opts.workspaces = workspaces;
+      await fs.mkdirp(path.join(pkg.directory, 'packages'));
     }
-    lernaConfig.command.publish = {
-      registry: publishUrl,
-    };
-  }
+    pkg.isPrivate = true;
+    pkg.scripts.postinstall = 'lerna bootstrap';
 
-  if (!fs.existsSync(lernaConfig)) {
-    await fs.writeFile(lernaLocation, JSON.stringify(lernaConfig, null, '  '));
-  }
-
-  return pkg;
-};
+    return pkg;
+  },
+);
 
 export default lerna;

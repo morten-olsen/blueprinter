@@ -1,7 +1,9 @@
-import Package from '../Package';
 import path from 'path';
-import fs from 'fs-extra';
 import Step from './Step';
+import addDevDependencies from './addDevDependencies';
+import mkjson from './mkjson';
+import compose from './compose';
+import setScript from './setScript';
 
 interface TypescriptOptions {
   overrideVersion?: boolean;
@@ -9,28 +11,28 @@ interface TypescriptOptions {
 
 const typescript = ({
   overrideVersion,
-}: TypescriptOptions): Step => async (pkg) => {
-  if (!pkg.devDependencies.typescript || overrideVersion) {
-    pkg.devDependencies.typescript = '^3.9.5';
-  }
-
-  pkg.scripts.build = 'tsc --build';
-
-  const config = {
-    compilerOptions: {
-      target: 'es2015',
-      module: 'commonjs',
-      strict: true,
-      declaration: true,
-      esModuleInterop: true,
-      skipLibCheck: true,
-      forceConsistentCasingInFileNames: true,  
+}: TypescriptOptions): Step => compose(
+  mkjson({
+    location: './tsconfig.json',
+    json: {
+      compilerOptions: {
+        target: 'es2015',
+        module: 'commonjs',
+        strict: true,
+        declaration: true,
+        esModuleInterop: true,
+        skipLibCheck: true,
+        forceConsistentCasingInFileNames: true,  
+      },
     },
-  };
-
-  await fs.writeFile(path.join(pkg.directory, 'tsconfig.json'), JSON.stringify(config, null, '  '));
-  
-  return pkg;
-};
+  }),
+  addDevDependencies({
+    typescript: '^3.9.5',
+  }),
+  setScript({
+    name: 'build',
+    script: 'tsc --watch',
+  }),
+);
 
 export default typescript;

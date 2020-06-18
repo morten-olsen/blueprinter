@@ -1,23 +1,24 @@
-import typescript from './typescript';
-import lerna from './lerna';
-import jest from './jest';
-import git from './git';
-import createMonoRepoPackage from './createMonoRepoPackage';
-import passthrough from './passthrough';
-import pkg from './pkg';
-import finalize from './finalize';
-import compose from './compose';
-import gitignore from './gitignore';
-
-export {
-  typescript,
-  lerna,
-  jest,
-  git,
-  createMonoRepoPackage,
-  passthrough,
-  pkg,
-  finalize,
-  compose,
-  gitignore,
-};
+export { default as typescript } from './typescript';
+export { default as lerna } from './lerna';
+export { default as jest } from './jest';
+export { default as git } from './git';
+export { default as createMonoRepoPackage } from './createMonoRepoPackage';
+export { default as passthrough } from './passthrough';
+export { default as pkg } from './pkg';
+export { default as compose } from './compose';
+export { default as gitignore } from './gitignore';
+export { default as script } from './script';
+export { default as addDependencies } from './addDependencies';
+export { default as addDevDependencies } from './addDevDependencies';
+export { default as addPeerDependencies } from './addPeerDependencies';
+export { default as load } from './load';
+export { default as addBin } from './addBin';
+export { default as download } from './download';
+export { default as setScript } from './setScript';
+export { default as gitIsClean } from './gitIsClean';
+export { default as gitCommit } from './gitCommit';
+export { default as install } from './install';
+export { default as writePkg } from './writePkg';
+export { default as sonarcloud } from './sonarcloud';
+export { default as setupTravis } from './setupTravis';
+export { default as createGithub } from './createGithub';

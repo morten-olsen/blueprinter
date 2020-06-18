@@ -3,13 +3,15 @@ import path from 'path';
 
 
 const run = async () => {
-  const location = path.join(process.cwd(), 'test');
+  const location = path.resolve('../test');
   const createPackage = tools.createMonoRepoPackage({
     owner: 'yo',
   });
+  const pkg = tools.pkg({});
   const setup = tools.compose(
-    tools.pkg('test'),
+    pkg('test'),
     tools.git,
+    tools.gitIsClean,
     tools.typescript({}),
     tools.jest({}),
     tools.lerna({}),
@@ -23,7 +25,8 @@ const run = async () => {
       createPackage('foo'),
     ),
     tools.gitignore,
-    tools.finalize,
+    tools.writePkg,
+    tools.install,
   );
 
   await setup(location);

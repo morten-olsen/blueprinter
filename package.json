@@ -1,12 +1,26 @@
 {
+  "name": "protoprinter",
+  "version": "1.0.0-alpha.1",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc --build",
+    "build:docs": "typedoc --mode modules --out docs src"
+  },
+  "bin": {
+    "protoprinter": "bin/bin.js"
+  },
   "devDependencies": {
     "@types/fs-extra": "^9.0.1",
-    "simple-git": "^2.7.0",
+    "@zeit/ncc": "^0.22.3",
     "ts-node": "^8.10.2",
+    "typedoc": "^0.17.7",
     "typescript": "^3.9.5"
   },
   "dependencies": {
+    "axios": "^0.19.2",
     "execa": "^4.0.2",
-    "fs-extra": "^9.0.1"
+    "fs-extra": "^9.0.1",
+    "simple-git": "^2.7.0"
   }
 }

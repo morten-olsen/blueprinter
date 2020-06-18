@@ -1,0 +1,27 @@
+name: publish
+on:
+  push:
+    branches:
+      - master
+jobs:
+  publish:
+    name: publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Setup node
+        uses: actions/setup-node@master
+        with:
+          node-version: 12.16.1
+      - name: Install
+        run: yarn install
+      - name: Build
+        run: |
+          yarn build
+          yarn build:docs
+      - name: Publish if version has been updated
+        uses: pascalgn/npm-publish-action@4f4bf159e299f65d21cd1cbd96fc5d53228036df
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
