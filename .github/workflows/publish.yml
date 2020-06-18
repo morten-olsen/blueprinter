@@ -20,6 +20,3 @@ jobs:
         run: |
           yarn build
           yarn build:docs
-      - run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_AUTH_TOKEN}}
