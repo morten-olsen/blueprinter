@@ -1,12 +1,15 @@
 {
   "name": "protoprinter",
-  "version": "1.0.0-alpha.3",
+  "version": "1.0.0-alpha.4",
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
     "build": "tsc --build",
     "build:docs": "typedoc --mode modules --out docs src",
-    "prepublishOnly": "yarn build"
+    "prepublishOnly": "yarn build",
+    "deploy": "nc",
+    "postdeploy": "yarn build:docs && bs --any-branch --directory docs",
+    "publish:alpha": " np prerelease --tag alpha --any-branch"
   },
   "bin": {
     "protoprinter": "bin/bin.js"
