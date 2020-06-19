@@ -1,6 +1,7 @@
 /node_modules
 /test
 /*.log
-/dist
 /.env.act
+/.actrc
+/src
 /docs
